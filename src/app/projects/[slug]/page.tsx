@@ -13,7 +13,19 @@ export function generateStaticParams() { return projects.map(({ slug }) => ({ sl
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const project = getProject((await params).slug);
   if (!project) return {};
-  return { title: project.title, description: project.summary, openGraph: { title: `${project.title} — Aakhya Chaudhary`, description: project.summary } };
+  const path = `/projects/${project.slug}`;
+  return {
+    title: project.title,
+    description: project.summary,
+    alternates: { canonical: path },
+    openGraph: {
+      title: `${project.title} — Aakhya Chaudhary`,
+      description: project.summary,
+      url: path,
+      type: "article",
+      images: [{ url: "/opengraph-image.png", width: 1200, height: 630, alt: "Aakhya Chaudhary — Software Engineer" }],
+    },
+  };
 }
 
 export default async function ProjectPage({ params }: Props) {
@@ -27,7 +39,7 @@ export default async function ProjectPage({ params }: Props) {
         <h1>{project.title}</h1>
         <p>{project.summary}</p>
         <div className="focus-list">{project.focus.map((item) => <span key={item}>{item}</span>)}</div>
-        {project.github && <a className="button" href={project.github} target="_blank" rel="noreferrer">View GitHub repository <ArrowIcon external /></a>}
+        {project.githubUrl && <a className="button" href={project.githubUrl} target="_blank" rel="noopener noreferrer" aria-label={`${project.title} GitHub repository (opens in a new tab)`}>View GitHub repository <ArrowIcon external /></a>}
       </header>
       <section className="project-overview">
         <div><span className="detail-number">01</span><h2>Overview</h2></div>

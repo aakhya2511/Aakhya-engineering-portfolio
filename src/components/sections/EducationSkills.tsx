@@ -14,6 +14,7 @@ export function EducationSkills() {
                 <p className="eyebrow">{item.location}</p>
                 <h3>{item.school}</h3>
                 <p className="degree">{item.degree}</p>
+                {item.research && <p className="education-research"><span>Research</span>{item.research}</p>}
               </div>
               <div className="education-gpa"><span>GPA</span><strong>{item.gpa}</strong></div>
               {item.coursework.length > 0 && (

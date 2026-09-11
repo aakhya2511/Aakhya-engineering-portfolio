@@ -39,7 +39,7 @@ export function ExperienceSection() {
           <div><strong>50+</strong><span>workloads migrated</span></div>
           <div><strong>20+</strong><span>procedures converted</span></div>
           <div><strong>500M+</strong><span>records validated</span></div>
-          <div><strong>Up to 70%</strong><span>faster on selected workloads</span></div>
+          <div><strong>Up to 70%</strong><span>query-performance improvement on selected migrated workloads</span></div>
         </div>
         <TechList items={tenet.technologies} />
       </article>

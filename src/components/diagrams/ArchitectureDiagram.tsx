@@ -1,4 +1,6 @@
-export type DiagramKind = "tenet" | "raft" | "cdc" | "claims" | "rag" | "cache" | "evaluation";
+import { Fragment } from "react";
+
+export type DiagramKind = "tenet" | "raft" | "cdc" | "claims" | "rag" | "cache" | "evaluation" | "commerce" | "serverless" | "analytics";
 
 type Node = { title: string; detail?: string };
 type Stage = { label?: string; nodes: Node[]; relationship?: "peers"; connector?: "fan-in" };
@@ -77,6 +79,34 @@ const diagrams: Record<DiagramKind, { title: string; stages: Stage[] }> = {
       { nodes: [{ title: "Comparison" }] },
     ],
   },
+  commerce: {
+    title: "Server-mediated product search flow",
+    stages: [
+      { nodes: [{ title: "Search UI", detail: "debounced input · filters" }] },
+      { nodes: [{ title: "Server API", detail: "token management · normalization" }] },
+      { nodes: [{ title: "eBay Browse API" }] },
+      { nodes: [{ title: "Product results", detail: "pagination · resilient states" }] },
+    ],
+  },
+  serverless: {
+    title: "Event-driven text-to-speech flow",
+    stages: [
+      { nodes: [{ title: "S3 text upload" }] },
+      { nodes: [{ title: "Lambda", detail: "event processing" }] },
+      { nodes: [{ title: "Amazon Polly" }] },
+      { nodes: [{ title: "S3 audio output" }] },
+    ],
+  },
+  analytics: {
+    title: "Job-market analysis flow",
+    stages: [
+      { nodes: [{ title: "Job postings" }] },
+      { nodes: [{ title: "Collect & parse", detail: "Selenium · BeautifulSoup" }] },
+      { nodes: [{ title: "Structured records" }] },
+      { nodes: [{ title: "Skill extraction", detail: "KeyBERT" }] },
+      { nodes: [{ title: "Trend analysis", detail: "pandas" }] },
+    ],
+  },
 };
 
 export function ArchitectureDiagram({ kind, compact = false }: { kind: DiagramKind; compact?: boolean }) {
@@ -99,13 +129,13 @@ export function ArchitectureDiagram({ kind, compact = false }: { kind: DiagramKi
                       <strong>{node.title}</strong>
                       {node.detail && <small>{node.detail}</small>}
                     </div>
-                    {stage.relationship === "peers" && nodeIndex < stage.nodes.length - 1 && <PeerConnector />}
+                    {stage.relationship === "peers" && nodeIndex < stage.nodes.length - 1 && <PeerConnector markerId={`${kind}-peer-${nodeIndex}`} />}
                   </div>
                 ))}
               </div>
             </div>
             {stageIndex < diagram.stages.length - 1 && (
-              stage.connector === "fan-in" ? <FanInConnector /> : <DiagramConnector />
+              stage.connector === "fan-in" ? <FanInConnector markerId={`${kind}-fan-${stageIndex}`} /> : <DiagramConnector markerId={`${kind}-flow-${stageIndex}`} />
             )}
           </Fragment>
         ))}
@@ -114,34 +144,46 @@ export function ArchitectureDiagram({ kind, compact = false }: { kind: DiagramKi
   );
 }
 
-function DiagramConnector() {
+function ArrowMarker({ id }: { id: string }) {
+  return (
+    <marker id={id} viewBox="0 0 5 5" refX="4.5" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path className="diagram-arrowhead" d="M0 0 5 2.5 0 5Z" />
+    </marker>
+  );
+}
+
+function DiagramConnector({ markerId }: { markerId: string }) {
   return (
     <div className="diagram-connector" aria-hidden="true">
       <svg className="connector-horizontal" viewBox="0 0 32 32">
-        <path d="M0 16h32m-6-6 6 6-6 6" />
+        <defs><ArrowMarker id={`${markerId}-h`} /></defs>
+        <path d="M0 16h29" markerEnd={`url(#${markerId}-h)`} />
       </svg>
       <svg className="connector-vertical" viewBox="0 0 32 32">
-        <path d="M16 0v32m-6-6 6 6 6-6" />
+        <defs><ArrowMarker id={`${markerId}-v`} /></defs>
+        <path d="M16 0v29" markerEnd={`url(#${markerId}-v)`} />
       </svg>
     </div>
   );
 }
 
-function PeerConnector() {
+function PeerConnector({ markerId }: { markerId: string }) {
   return (
     <svg className="peer-connector" aria-hidden="true" viewBox="0 0 24 24">
-      <path d="M1 12h22M6 7l-5 5 5 5m12-10 5 5-5 5" />
+      <defs><ArrowMarker id={markerId} /></defs>
+      <path d="M3 12h18" markerStart={`url(#${markerId})`} markerEnd={`url(#${markerId})`} />
     </svg>
   );
 }
 
-function FanInConnector() {
+function FanInConnector({ markerId }: { markerId: string }) {
   return (
     <div className="diagram-connector fan-in-connector" aria-hidden="true">
       <svg className="connector-vertical" viewBox="0 0 100 36" preserveAspectRatio="none">
-        <path d="M25 0c0 15 25 8 25 27M75 0c0 15-25 8-25 27M50 27v9m-2-4 2 4 2-4" />
+        <defs><ArrowMarker id={markerId} /></defs>
+        <path d="M25 0c0 15 25 8 25 27M75 0c0 15-25 8-25 27" />
+        <path d="M50 27v6" markerEnd={`url(#${markerId})`} />
       </svg>
     </div>
   );
 }
-import { Fragment } from "react";

@@ -16,8 +16,9 @@ export function AboutMetrics() {
             </dl>
           </div>
           <div className="about-copy reveal">
-            <p>At Tenet / Conifer, I modernized healthcare analytics workflows from DB2 and file-driven processes to BigQuery and GCP, building pipelines and validating production data at scale.</p>
-            <p>Outside enterprise data work, I build consensus-driven storage, CDC platforms, backend infrastructure, and LLM evaluation systems—work where <em>correctness, recovery,</em> and clear system boundaries matter.</p>
+            <p>I&apos;m a Computer Science graduate from Southern Methodist University with experience across enterprise data engineering, backend and distributed systems, and applied AI.</p>
+            <p>At Tenet / Conifer, I modernized healthcare analytics workflows from DB2 and file-driven systems into BigQuery and GCP pipelines, spanning migration, validation, orchestration, troubleshooting, and production support.</p>
+            <p>Outside enterprise data work, I build distributed storage systems, CDC platforms, backend infrastructure, and LLM evaluation pipelines with an emphasis on <em>correctness, reproducibility,</em> and clear system design.</p>
           </div>
         </div>
       </section>

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { profileLinks } from "@/data/profile";
 
 const items = [
@@ -14,6 +14,8 @@ const items = [
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const mobileMenuRef = useRef<HTMLDetailsElement>(null);
+  const closeMobileMenu = () => mobileMenuRef.current?.removeAttribute("open");
   useEffect(() => {
     const update = () => setScrolled(window.scrollY > 12);
     update();
@@ -31,11 +33,11 @@ export function Navbar() {
           {items.map(([label, href]) => <Link key={label} href={href}>{label}</Link>)}
           {profileLinks.resume && <a href={profileLinks.resume}>Resume</a>}
         </div>
-        <details className="mobile-menu">
+        <details className="mobile-menu" ref={mobileMenuRef}>
           <summary aria-label="Open navigation"><span /><span /></summary>
           <div>
-            {items.map(([label, href]) => <Link key={label} href={href}>{label}</Link>)}
-            {profileLinks.resume && <a href={profileLinks.resume}>Resume</a>}
+            {items.map(([label, href]) => <Link key={label} href={href} onClick={closeMobileMenu}>{label}</Link>)}
+            {profileLinks.resume && <a href={profileLinks.resume} onClick={closeMobileMenu}>Resume</a>}
           </div>
         </details>
       </nav>

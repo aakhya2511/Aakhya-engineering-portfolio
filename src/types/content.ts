@@ -4,6 +4,7 @@ export type LinkConfig = {
   github: string | null;
   linkedin: string | null;
   email: string | null;
+  phone: string | null;
   resume: string | null;
 };
 
@@ -21,8 +22,9 @@ export type Project = {
   technologies: string[];
   focus: string[];
   diagram: DiagramKind;
-  github: string | null;
+  githubUrl: string | null;
   featured: boolean;
+  section: "featured" | "more" | "additional";
 };
 
 export type Experience = {
