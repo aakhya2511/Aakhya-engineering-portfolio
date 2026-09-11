@@ -5,12 +5,11 @@ export const profileLinks: LinkConfig = {
   linkedin: "https://www.linkedin.com/in/aakhya-chaudhary",
   email: "mailto:aakhyac@smu.edu",
   phone: "tel:+19453355666",
-  resume: null,
 };
 
 export const metrics = [
-  { value: "50+", label: "Enterprise analytics workloads migrated" },
-  { value: "20+", label: "Stored procedures converted" },
+  { value: "60+", label: "Enterprise analytics workloads migrated" },
+  { value: "40+", label: "Stored procedures converted" },
   { value: "500M+", label: "Records processed / validated" },
   { value: "30K+", label: "Research records analyzed" },
 ];

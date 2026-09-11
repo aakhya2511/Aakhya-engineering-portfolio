@@ -5,7 +5,6 @@ export type LinkConfig = {
   linkedin: string | null;
   email: string | null;
   phone: string | null;
-  resume: string | null;
 };
 
 export type Project = {
@@ -33,5 +32,7 @@ export type Experience = {
   location?: string;
   dates: string;
   summary: string;
+  areas?: Array<{ title: string; text: string }>;
+  impact?: Array<{ value: string; label: string }>;
   technologies: string[];
 };

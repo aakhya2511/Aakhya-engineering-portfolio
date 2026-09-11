@@ -20,7 +20,7 @@ https://aakhya-engineering-portfolio.vercel.app/
 - Reusable project case-study system
 - Accessible navigation and reduced-motion support
 - Statically generated project routes
-- Verified project source links
+- Verified GitHub project links
 - SEO and social-preview metadata
 
 ## Development

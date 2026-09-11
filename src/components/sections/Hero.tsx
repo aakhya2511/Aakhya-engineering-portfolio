@@ -19,7 +19,6 @@ export function Hero() {
             <Link className="button button--primary" href="#projects">View my work <ArrowIcon /></Link>
             {profileLinks.github && <a className="text-link" href={profileLinks.github} target="_blank" rel="noopener noreferrer" aria-label="Aakhya Chaudhary on GitHub (opens in a new tab)">GitHub <ArrowIcon external /></a>}
             {profileLinks.linkedin && <a className="text-link" href={profileLinks.linkedin} target="_blank" rel="noopener noreferrer" aria-label="Aakhya Chaudhary on LinkedIn (opens in a new tab)">LinkedIn <ArrowIcon external /></a>}
-            {profileLinks.resume && <a className="text-link" href={profileLinks.resume}>Resume <ArrowIcon external /></a>}
           </div>
           <div className="hero-meta">
             <span>Core stack</span>

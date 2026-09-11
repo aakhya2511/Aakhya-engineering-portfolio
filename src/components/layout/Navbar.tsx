@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { profileLinks } from "@/data/profile";
 
 const items = [
   ["About", "/#about"],
@@ -31,13 +30,11 @@ export function Navbar() {
         </Link>
         <div className="nav-links">
           {items.map(([label, href]) => <Link key={label} href={href}>{label}</Link>)}
-          {profileLinks.resume && <a href={profileLinks.resume}>Resume</a>}
         </div>
         <details className="mobile-menu" ref={mobileMenuRef}>
           <summary aria-label="Open navigation"><span /><span /></summary>
           <div>
             {items.map(([label, href]) => <Link key={label} href={href} onClick={closeMobileMenu}>{label}</Link>)}
-            {profileLinks.resume && <a href={profileLinks.resume} onClick={closeMobileMenu}>Resume</a>}
           </div>
         </details>
       </nav>
