@@ -25,6 +25,7 @@ export function ProjectsSection() {
                   {project.evidence.map((item) => <div key={item.label}><strong>{item.value}</strong><span>{item.label}</span></div>)}
                 </div>
               )}
+              {project.evidenceNote && <p className="project-evidence-note">{project.evidenceNote}</p>}
               <div className="focus-list">
                 {project.focus.map((item) => <span key={item}>{item}</span>)}
               </div>

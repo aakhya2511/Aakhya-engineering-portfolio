@@ -31,6 +31,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ProjectPage({ params }: Props) {
   const project = getProject((await params).slug);
   if (!project) notFound();
+  const detailEvidence = project.detailEvidence ?? project.evidence;
   return (
     <article className="project-page shell">
       <Link className="back-link" href="/#projects">← All projects</Link>
@@ -58,8 +59,8 @@ export default async function ProjectPage({ params }: Props) {
         <div><span className="detail-number">06</span><h2>Testing & validation</h2></div>
         <ul>{project.validation.map((item) => <li key={item}>{item}</li>)}</ul>
       </section>
-      {project.evidence.length > 0 && <section className="detail-evidence"><span className="detail-number">07</span><h2>Evidence</h2><div>{project.evidence.map((item) => <p key={item.label}><strong>{item.value}</strong><span>{item.label}</span></p>)}</div></section>}
-      <section className="project-technologies"><span className="detail-number">{project.evidence.length > 0 ? "08" : "07"}</span><h2>Technologies</h2><TechList items={project.technologies} /></section>
+      {detailEvidence.length > 0 && <section className="detail-evidence"><span className="detail-number">07</span><h2>Evidence</h2><div>{detailEvidence.map((item) => <p key={item.label}><strong>{item.value}</strong><span>{item.label}</span></p>)}</div>{project.evidenceNote && <p className="detail-evidence-note">{project.evidenceNote}</p>}</section>}
+      <section className="project-technologies"><span className="detail-number">{detailEvidence.length > 0 ? "08" : "07"}</span><h2>Technologies</h2><TechList items={project.technologies} /></section>
       <nav className="next-project" aria-label="Project navigation">
         {(() => { const next = projects[(projects.findIndex((item) => item.slug === project.slug) + 1) % projects.length]; return <Link href={`/projects/${next.slug}`}><span>Next project</span>{next.title}<ArrowIcon /></Link>; })()}
       </nav>

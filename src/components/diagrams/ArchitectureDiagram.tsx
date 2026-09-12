@@ -28,15 +28,7 @@ const diagrams: Record<DiagramKind, { title: string; stages: Stage[] }> = {
   },
   cdc: {
     title: "CinemaPulse data flow",
-    stages: [
-      { label: "Operational sources", nodes: [{ title: "PostgreSQL" }, { title: "MongoDB" }], connector: "fan-in" },
-      { nodes: [{ title: "CDC", detail: "ordered source changes" }] },
-      { nodes: [{ title: "Trusted events", detail: "auditable · replayable" }] },
-      { nodes: [{ title: "Materialization" }] },
-      { nodes: [{ title: "Apache Iceberg" }] },
-      { nodes: [{ title: "Polaris" }] },
-      { nodes: [{ title: "DuckDB" }] },
-    ],
+    stages: [],
   },
   claims: {
     title: "Claim verification flow",
@@ -111,6 +103,7 @@ const diagrams: Record<DiagramKind, { title: string; stages: Stage[] }> = {
 
 export function ArchitectureDiagram({ kind, compact = false }: { kind: DiagramKind; compact?: boolean }) {
   const diagram = diagrams[kind];
+  if (kind === "cdc") return <CinemaPulseDiagram title={diagram.title} />;
   return (
     <figure className={`architecture architecture--${kind} ${compact ? "architecture--compact" : ""}`} aria-label={diagram.title}>
       <figcaption>
@@ -142,6 +135,78 @@ export function ArchitectureDiagram({ kind, compact = false }: { kind: DiagramKi
       </div>
     </figure>
   );
+}
+
+function CinemaPulseDiagram({ title }: { title: string }) {
+  return (
+    <figure className="architecture architecture--cdc" aria-label={title}>
+      <figcaption><span className="status-dot" /> System architecture<span>{title}</span></figcaption>
+      <div className="cinema-flow">
+        <div className="cinema-ingress">
+          <div className="cinema-ingress-path">
+            <span className="cinema-stage-label">Transactional sources</span>
+            <div className="cinema-source-pair"><PipelineNode title="PostgreSQL" /><PipelineNode title="MongoDB" /></div>
+            <FlowArrow />
+            <PipelineNode title="Debezium · Kafka Connect" detail="WAL + change streams" accent />
+          </div>
+          <div className="cinema-ingress-path">
+            <span className="cinema-stage-label">Playback telemetry</span>
+            <PipelineNode title="Playback simulator" detail="deterministic fixtures" />
+            <FlowArrow />
+            <PipelineNode title="Avro" detail="typed playback events" accent />
+          </div>
+        </div>
+        <MergeConnector markerId="cinema-ingress-merge" />
+        <PipelineNode title="Kafka" detail="durable keyed transport" accent />
+        <FlowArrow />
+        <PipelineNode title="Spark Structured Streaming" detail="bounded ingestion · event-time state" />
+        <FlowArrow />
+        <PipelineNode title="Iceberg Bronze" detail="append-only physical delivery evidence" />
+        <FlowArrow />
+        <PipelineNode title="Validation · durable dedup · quarantine" detail="logical identity · payload hashes · lineage" />
+        <FlowArrow />
+        <PipelineNode title="Trusted Silver" detail="validated logical records" accent />
+        <BranchConnector markerId="cinema-silver-branch" />
+        <div className="cinema-branch">
+          <PipelineNode title="Stateful sessions" detail="event time · checkpoints" />
+          <PipelineNode title="CDC current state" detail="replay-aware convergence" />
+        </div>
+        <MergeConnector markerId="cinema-gold-merge" />
+        <PipelineNode title="SCD2 dimensions · Gold facts" detail="historically correct joins" />
+        <FlowArrow />
+        <PipelineNode title="QoE · engagement · payment marts" />
+        <FlowArrow />
+        <PipelineNode title="DuckDB" detail="independent analytical validation" accent />
+      </div>
+      <div className="cinema-support" aria-label="Supporting services">
+        <span className="cinema-stage-label">Supporting services</span>
+        <div className="cinema-support-grid">
+          <PipelineNode title="Schema Registry" detail="Kafka · Avro schemas" />
+          <PipelineNode title="Polaris" detail="Iceberg catalog" />
+          <PipelineNode title="MinIO" detail="object storage" />
+          <PipelineNode title="Airflow" detail="bounded orchestration" />
+          <PipelineNode title="Prometheus · Grafana" detail="observability" />
+        </div>
+      </div>
+      <p className="cinema-semantics">At-least-once CDC with replay detection, checkpoint recovery, and deterministic downstream convergence.</p>
+    </figure>
+  );
+}
+
+function PipelineNode({ title, detail, accent = false }: Node & { accent?: boolean }) {
+  return <div className={`architecture-node cinema-node${accent ? " cinema-node--accent" : ""}`}><strong>{title}</strong>{detail && <small>{detail}</small>}</div>;
+}
+
+function FlowArrow() {
+  return <div className="cinema-arrow" aria-hidden="true"><span /></div>;
+}
+
+function MergeConnector({ markerId }: { markerId: string }) {
+  return <svg className="cinema-connector cinema-connector--merge" aria-hidden="true" viewBox="0 0 100 28" preserveAspectRatio="none"><defs><ArrowMarker id={markerId} /></defs><path d="M25 0v7c0 5 25 3 25 14M75 0v7c0 5-25 3-25 14M50 21v4" markerEnd={`url(#${markerId})`} /></svg>;
+}
+
+function BranchConnector({ markerId }: { markerId: string }) {
+  return <svg className="cinema-connector cinema-connector--branch" aria-hidden="true" viewBox="0 0 100 28" preserveAspectRatio="none"><defs><ArrowMarker id={`${markerId}-left`} /><ArrowMarker id={`${markerId}-right`} /></defs><path d="M50 0v7M50 7c0 5-25 3-25 14v4" markerEnd={`url(#${markerId}-left)`} /><path d="M50 7c0 5 25 3 25 14v4" markerEnd={`url(#${markerId}-right)`} /></svg>;
 }
 
 function ArrowMarker({ id }: { id: string }) {

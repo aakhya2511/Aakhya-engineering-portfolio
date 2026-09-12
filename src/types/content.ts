@@ -18,6 +18,8 @@ export type Project = {
   decisions: string[];
   validation: string[];
   evidence: Array<{ value: string; label: string }>;
+  detailEvidence?: Array<{ value: string; label: string }>;
+  evidenceNote?: string;
   technologies: string[];
   focus: string[];
   diagram: DiagramKind;
