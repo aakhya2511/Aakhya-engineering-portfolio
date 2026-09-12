@@ -20,6 +20,7 @@ export type Project = {
   evidence: Array<{ value: string; label: string }>;
   detailEvidence?: Array<{ value: string; label: string }>;
   evidenceNote?: string;
+  detailEvidenceNote?: string;
   technologies: string[];
   focus: string[];
   diagram: DiagramKind;

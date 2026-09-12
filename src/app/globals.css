@@ -42,7 +42,7 @@ a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outli
 .mobile-menu summary span { width: 16px; height: 1px; background: var(--text); display: block; }
 .mobile-menu > div { position: fixed; inset: 64px 0 auto; padding: 20px 24px; background: #0a0e10; border-bottom: 1px solid var(--line); display: grid; gap: 18px; }
 
-.hero { min-height: 82svh; padding-top: 112px; padding-bottom: 64px; position: relative; display: grid; align-content: center; overflow: hidden; }
+.hero { min-height: clamp(600px, 67svh, 730px); padding-top: 112px; padding-bottom: 48px; position: relative; display: grid; align-content: center; overflow: hidden; }
 .hero-grid { position: absolute; z-index: 0; top: 96px; right: 0; width: 46%; height: 54%; opacity: .3; border: 1px solid rgba(102,227,196,.08); background-image: linear-gradient(rgba(102,227,196,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(102,227,196,.045) 1px, transparent 1px); background-size: 54px 54px; mask-image: linear-gradient(to bottom left, black, transparent 78%); }
 .hero-grid::after { content: ""; position: absolute; width: 7px; height: 7px; top: 53px; left: 53px; background: var(--accent); box-shadow: 216px 108px 0 rgba(102,227,196,.55), 54px 270px 0 rgba(102,227,196,.35); }
 .hero-layout { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 56fr) minmax(360px, 44fr); gap: clamp(36px, 5vw, 70px); align-items: center; }
@@ -64,9 +64,6 @@ a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outli
 .hero-meta { margin-top: 28px; max-width: 500px; padding-top: 11px; border-top: 1px solid var(--line); display: grid; gap: 7px; }
 .hero-meta span { color: var(--faint); font: 10px var(--font-geist-mono); text-transform: uppercase; letter-spacing: .12em; }
 .hero-meta code { color: #a9b1af; font: 11px/1.7 var(--font-geist-mono); }
-.scroll-cue { position: absolute; bottom: 32px; left: 0; color: var(--faint); font: 10px var(--font-geist-mono); text-transform: uppercase; letter-spacing: .1em; display: flex; align-items: center; gap: 10px; }
-.scroll-cue span { width: 32px; height: 1px; background: var(--line-strong); }
-
 .section { padding-top: 72px; scroll-margin-top: 64px; }
 .section-heading { display: grid; grid-template-columns: 16.6% 1fr; padding-bottom: 32px; border-bottom: 1px solid var(--line); }
 .section-index { color: var(--accent); }
@@ -325,7 +322,7 @@ a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outli
 .not-found h1 { font-size: clamp(45px, 7vw, 90px); letter-spacing: -.06em; font-weight: 520; }
 
 @media (max-width: 900px) {
-  .hero { min-height: auto; }
+  .hero { min-height: auto; padding-bottom: 64px; }
   .hero-layout { grid-template-columns: 1fr; gap: 44px; }
   .hero-copy { max-width: 650px; }
   .hero-meta { max-width: 620px; }
@@ -354,7 +351,6 @@ a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outli
   .hero-focus { margin-bottom: 16px; }
   .hero-statement { margin-top: 0; }
   .hero-grid { width: 76%; height: 38%; }
-  .scroll-cue { display: none; }
   .section { padding-top: 68px; }
   .section-heading { display: block; padding-bottom: 28px; }
   .section-index { display: block; margin-bottom: 28px; }

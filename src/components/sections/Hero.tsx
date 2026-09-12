@@ -25,7 +25,6 @@ export function Hero() {
           </div>
         </div>
       </div>
-      <a className="scroll-cue" href="#about"><span /> Scroll to explore</a>
     </section>
   );
 }

@@ -18,13 +18,7 @@ const diagrams: Record<DiagramKind, { title: string; stages: Stage[] }> = {
   },
   raft: {
     title: "RivetDB system architecture",
-    stages: [
-      { nodes: [{ title: "Client" }] },
-      { label: "Raft cluster", nodes: [{ title: "Node A" }, { title: "Node B" }, { title: "Node C" }], relationship: "peers" },
-      { nodes: [{ title: "Replicated log" }] },
-      { nodes: [{ title: "State machine" }] },
-      { nodes: [{ title: "Storage", detail: "in-memory · durable" }] },
-    ],
+    stages: [],
   },
   cdc: {
     title: "CinemaPulse data flow",
@@ -101,6 +95,7 @@ export function ArchitectureDiagram({ kind, compact = false }: { kind: DiagramKi
   const diagram = diagrams[kind];
   if (kind === "cdc") return <CinemaPulseDiagram title={diagram.title} />;
   if (kind === "claims") return <ClaimVerificationDiagram title={diagram.title} />;
+  if (kind === "raft") return <RivetDBDiagram title={diagram.title} />;
   return (
     <figure className={`architecture architecture--${kind} ${compact ? "architecture--compact" : ""}`} aria-label={diagram.title}>
       <figcaption>
@@ -129,6 +124,40 @@ export function ArchitectureDiagram({ kind, compact = false }: { kind: DiagramKi
             )}
           </Fragment>
         ))}
+      </div>
+    </figure>
+  );
+}
+
+function RivetDBDiagram({ title }: { title: string }) {
+  return (
+    <figure className="architecture architecture--raft" aria-label={title}>
+      <figcaption><span className="status-dot" /> System architecture<span>{title}</span></figcaption>
+      <div className="cinema-flow">
+        <span className="cinema-stage-label">Replicated data path</span>
+        <PipelineNode title="Caller" detail="in-process key-value + transaction APIs" />
+        <FlowArrow />
+        <PipelineNode title="Range router" detail="key → range → leader · stale-route refresh" />
+        <FlowArrow />
+        <PipelineNode title="Replicated MetaRange" detail="range metadata · placement authority" />
+        <FlowArrow />
+        <PipelineNode title="Multi-Raft range" detail="per-range replication · election · ordered apply" accent />
+        <FlowArrow />
+        <PipelineNode title="Replicated MVCC state machine" detail="history · intents · Snapshot Isolation · 2PC" />
+        <FlowArrow />
+        <PipelineNode title="Custom LSM storage engine" detail="WAL · MemTables · SSTables · Bloom filters · Manifest · compaction" accent />
+      </div>
+      <div className="cinema-support" aria-label="Validator-gated range management">
+        <span className="cinema-stage-label">Validator-gated control plane</span>
+        <div className="cinema-flow">
+          <PipelineNode title="Telemetry · range state" />
+          <FlowArrow />
+          <PipelineNode title="Deterministic rebalancer" detail="placement · health · capacity · cooldown" />
+          <FlowArrow />
+          <PipelineNode title="Safety validator" detail="mandatory before admission" accent />
+          <FlowArrow />
+          <PipelineNode title="Split · migration · replica movement" detail="restartable certified protocols" />
+        </div>
       </div>
     </figure>
   );
