@@ -8,11 +8,10 @@ export function Hero() {
       <div className="hero-grid" aria-hidden="true" />
       <div className="hero-layout">
         <div className="hero-identity">
-          <p className="eyebrow"><span className="status-dot" /> Software Engineer</p>
+          <p className="eyebrow"><span className="status-dot" /> Software Engineering · Data Systems · Applied AI</p>
           <h1 id="hero-title">Aakhya<br />Chaudhary</h1>
         </div>
         <div className="hero-copy">
-          <p className="hero-focus">Backend · Data Systems · Applied AI</p>
           <p className="hero-statement">I build reliable data systems and <span>intelligent software.</span></p>
           <p className="hero-support">Computer Science engineer with experience across enterprise data engineering, backend systems, distributed systems, and applied AI.</p>
           <div className="hero-actions">
