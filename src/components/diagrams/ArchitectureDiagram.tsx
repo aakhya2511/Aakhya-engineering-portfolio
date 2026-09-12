@@ -31,15 +31,8 @@ const diagrams: Record<DiagramKind, { title: string; stages: Stage[] }> = {
     stages: [],
   },
   claims: {
-    title: "Claim verification flow",
-    stages: [
-      { nodes: [{ title: "Claim" }] },
-      { nodes: [{ title: "Evidence / context" }] },
-      { nodes: [{ title: "Verification pipeline" }] },
-      { nodes: [{ title: "LLM", detail: "configurable provider + model" }] },
-      { nodes: [{ title: "Structured decision" }] },
-      { nodes: [{ title: "Evaluation" }] },
-    ],
+    title: "Deterministic-first claim verification",
+    stages: [],
   },
   rag: {
     title: "Retrieval-augmented generation flow",
@@ -53,12 +46,15 @@ const diagrams: Record<DiagramKind, { title: string; stages: Stage[] }> = {
     ],
   },
   cache: {
-    title: "Cache service flow",
+    title: "Machine-local cache request path",
     stages: [
-      { nodes: [{ title: "Client request" }] },
-      { nodes: [{ title: "Protocol layer" }] },
-      { nodes: [{ title: "Cache core", detail: "invariants · policy" }] },
-      { nodes: [{ title: "Response" }] },
+      { nodes: [{ title: "Client" }] },
+      { nodes: [{ title: "Unix domain socket", detail: "versioned binary protocol" }] },
+      { nodes: [{ title: "epoll · connection state", detail: "fragmentation · partial writes" }] },
+      { nodes: [{ title: "Bounded work queue", detail: "backpressure" }] },
+      { nodes: [{ title: "Worker pool" }] },
+      { nodes: [{ title: "Exact global LRU", detail: "map · list · cache mutex" }] },
+      { nodes: [{ title: "eventfd completion", detail: "serialize · return response" }] },
     ],
   },
   evaluation: {
@@ -104,6 +100,7 @@ const diagrams: Record<DiagramKind, { title: string; stages: Stage[] }> = {
 export function ArchitectureDiagram({ kind, compact = false }: { kind: DiagramKind; compact?: boolean }) {
   const diagram = diagrams[kind];
   if (kind === "cdc") return <CinemaPulseDiagram title={diagram.title} />;
+  if (kind === "claims") return <ClaimVerificationDiagram title={diagram.title} />;
   return (
     <figure className={`architecture architecture--${kind} ${compact ? "architecture--compact" : ""}`} aria-label={diagram.title}>
       <figcaption>
@@ -132,6 +129,34 @@ export function ArchitectureDiagram({ kind, compact = false }: { kind: DiagramKi
             )}
           </Fragment>
         ))}
+      </div>
+    </figure>
+  );
+}
+
+function ClaimVerificationDiagram({ title }: { title: string }) {
+  return (
+    <figure className="architecture architecture--claims" aria-label={title}>
+      <figcaption><span className="status-dot" /> System architecture<span>{title}</span></figcaption>
+      <div className="cinema-flow">
+        <PipelineNode title="Claim" />
+        <FlowArrow />
+        <PipelineNode title="Normalize" />
+        <FlowArrow />
+        <PipelineNode title="Authoritative evidence" detail="claim-scoped fields only" />
+        <FlowArrow />
+        <PipelineNode title="Deterministic rules" detail="exact facts resolved first" accent />
+        <BranchConnector markerId="claim-routing-branch" />
+        <div className="cinema-branch">
+          <PipelineNode title="Terminal verdict" detail="when rules settle the claim" />
+          <div className="cinema-ingress-path">
+            <PipelineNode title="LLM fallback" detail="semantic ambiguity only" />
+            <FlowArrow />
+            <PipelineNode title="Schema validation" detail="JSON Schema · Pydantic" />
+          </div>
+        </div>
+        <MergeConnector markerId="claim-verdict-merge" />
+        <PipelineNode title="Auditable verdict" detail="versioned structured response" accent />
       </div>
     </figure>
   );
