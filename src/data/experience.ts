@@ -3,7 +3,7 @@ import type { Experience } from "@/types/content";
 export const experiences: Experience[] = [
   {
     company: "Tenet Healthcare / Conifer Health Solutions",
-    role: "Data & Analytics Intern",
+    role: "Data Engineer Intern",
     location: "Dallas, Texas",
     dates: "June 2025 — May 2026",
     summary: "Modernized healthcare analytics workflows across DB2, BigQuery, and GCP, with hands-on ownership of migrations, pipelines, reconciliation, and production support.",
