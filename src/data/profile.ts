@@ -15,11 +15,11 @@ export const metrics = [
 ];
 
 export const skillGroups = [
-  { title: "Languages", items: ["Python", "SQL", "C++", "Java"] },
-  { title: "Backend & Systems", items: ["Distributed systems", "Caching", "Concurrency", "API / backend design"] },
-  { title: "Data", items: ["BigQuery", "PostgreSQL", "DB2", "pandas", "Apache Iceberg"] },
-  { title: "Cloud & Infrastructure", items: ["GCP", "Airflow", "Azure DevOps", "AWS"] },
-  { title: "AI / ML", items: ["PyTorch", "Hugging Face", "LLMs", "RAG", "Embeddings", "FAISS", "Model evaluation"] },
+  { title: "Languages", items: ["Java", "Python", "SQL", "C++", "Go", "JavaScript / TypeScript"] },
+  { title: "Backend & Systems", items: ["FastAPI", "REST APIs", "Linux", "Distributed Systems", "Concurrency", "Caching", "Protocol Design", "Raft / Multi-Raft"] },
+  { title: "Data & Streaming", items: ["BigQuery", "PostgreSQL", "MongoDB", "Kafka", "Debezium", "Spark Structured Streaming", "Apache Iceberg", "Airflow", "dbt", "DuckDB", "pandas"] },
+  { title: "Cloud & Infrastructure", items: ["GCP", "AWS", "Docker", "Azure DevOps", "Git / GitHub", "Prometheus", "Grafana"] },
+  { title: "AI / ML", items: ["PyTorch", "Hugging Face", "LLMs", "RAG", "Embeddings", "FAISS", "Ollama", "KeyBERT"] },
 ];
 
 export const education = [
