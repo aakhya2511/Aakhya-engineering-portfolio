@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: project.summary,
       url: path,
       type: "article",
-      images: [{ url: "/opengraph-image.png", width: 1200, height: 630, alt: "Aakhya Chaudhary — Software Engineer" }],
+      images: [{ url: "/opengraph-image.png", width: 1200, height: 630, alt: "Aakhya Chaudhary — Software, Data & AI Engineer" }],
     },
   };
 }

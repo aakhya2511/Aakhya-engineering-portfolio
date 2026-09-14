@@ -346,6 +346,8 @@ a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outli
   :root { --shell: calc(100vw - 32px); }
   .nav-links { display: none; }
   .mobile-menu { display: block; }
+  .mobile-menu summary { width: 44px; height: 44px; }
+  .button { min-height: 44px; }
   .hero { min-height: auto; padding-top: 104px; padding-bottom: 52px; }
   .hero h1 { font-size: clamp(44px, 14.5vw, 76px); line-height: .83; }
   .hero-layout { gap: 32px; }
@@ -353,6 +355,7 @@ a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outli
   .hero-statement { margin-top: 0; }
   .hero-grid { width: 76%; height: 38%; }
   .section { padding-top: 68px; }
+  #about { padding-top: 36px; }
   .section-heading { display: block; padding-bottom: 28px; }
   .section-index { display: block; margin-bottom: 28px; }
   .about-layout { grid-template-columns: 1fr; gap: 30px; padding-bottom: 38px; }
@@ -439,6 +442,11 @@ a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outli
   .validation-section ul { grid-template-columns: 1fr; }
   .detail-evidence > div { flex-direction: column; }
   .detail-evidence p { min-width: 0; }
+}
+
+@media (max-width: 500px) {
+  .skills-grid { grid-template-columns: 1fr; }
+  .project-hero h1 { font-size: clamp(40px, 11vw, 44px); }
 }
 
 @media (max-width: 420px) {
